@@ -8,7 +8,7 @@ jQuery(document).ready( function($) {
 
 		var $btn = $(this),
 			btnid = $btn.attr('id'),
-			group = $btn.closest('.upload');
+			$group = $btn.closest('.upload');
 
 		/*
 			With multiple uploads on each page, this only remembers the first one opened
@@ -38,15 +38,15 @@ jQuery(document).ready( function($) {
 
 			attachment = file_frames[ btnid ].state().get('selection').first().toJSON();
 
-			if ( group.find('br').next('img').length > 0 ) {
-				group.find('br').next('img').remove();
+			if ( $group.find('.uploaded-image').length > 0 ) {
+				$group.find('.uploaded-image').remove();
 			}
 
 			// set input
-			group.find('input[type="number"]').val( attachment.id );
+			$group.find('input[type="number"]').val( attachment.id );
 			// set preview
-			img = '<img src="' + attachment.url + '" />';
-			$btn.next('br').after( img );
+			img = '<img class="uploaded-image" src="' + attachment.url + '" />';
+			$group.append( img );
 
 		});
 

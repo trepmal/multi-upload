@@ -45,8 +45,10 @@ class Multi_Upload {
 		<h2><?php _e( 'Multi Upload', 'multi-upload' ); ?></h2>
 		<?php
 			if ( isset( $_POST['image'] ) ) {
-				foreach( $_POST['image'] as $name => $value )
-					update_option( $name, intval( $value ) );
+				foreach( $_POST['image'] as $name => $value ) {
+					$new = intval( $value ) === 0 ? '' : intval( $value );
+					update_option( $name, $new );
+				}
 			}
 		?>
 		<form method="post">
@@ -73,28 +75,31 @@ class Multi_Upload {
 		wp_enqueue_media( );
 		wp_enqueue_script( 'multi-upload', plugins_url( 'multi-upload.js', __FILE__ ), array('jquery'), '0.1.0', false );
 
-		echo '<p class="upload">';
+		echo '<div class="upload">';
 
 			$value = get_option( $id, '' );
 
+			echo '<p>';
 			echo '<input name="image['. esc_attr( $id ) .']" type="number" class="small-text" value="'. esc_attr( $value ) .'" />';
 
 			$button_text          = __( 'Upload', 'multi-upload' );
 			$uploader_title_text  = __( 'Select an Image', 'multi-upload' );
 			$uploader_button_text = __( 'Select', 'multi-upload' );
 
-			submit_button( $button_text, 'secondary small upload-image', 'submit', false, array(
+			submit_button( $button_text, 'secondary upload-image', 'submit', false, array(
 				'data-uploader_title'       => esc_attr( $uploader_title_text ),
 				'data-uploader_button_text' => esc_attr( $uploader_button_text ),
 				'id'                        => esc_attr( $id )
 			) );
 
+			echo '</p>';
+
 			if ( ! empty( $value ) ) {
 				$img = wp_get_attachment_image_src( $value );
-				echo "<br /><img src='$img[0]' />";
+				echo "<img class='uploaded-image' src='$img[0]' />";
 			}
 
-		echo '</p>';
+		echo '</div>';
 
 	}
 
